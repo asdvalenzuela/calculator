@@ -5,7 +5,6 @@ Using our arithmetic.py file from Exercise02, create the
 calculator program yourself in this file.
 """
 
-#from sys import argv
 """I know this is bad practice but I'm it doing it anyway
 because we're using all the functions in the file and no other
 libraries
@@ -13,11 +12,6 @@ libraries
 from arithmetic import *
 
 def is_input_valid(operation):
-    
-
-    #what if people put random spaces or commas?
-    #this is to split it according to spaces or commas.
-    #if there are no spaces/commas, it's not valid
 
     operation_as_list = split_operation(operation) #returns empty list if not possible
 
@@ -26,7 +20,7 @@ def is_input_valid(operation):
         return False
 
     #check whether list has only 2 or 3 characters
-    if not (len(operation_as_list) == 2 or len(operation_as_list) == 3):
+    if len(operation_as_list) <= 1:
         print "Please enter one operator and one or two operands."
         return False
     
@@ -39,17 +33,16 @@ def is_input_valid(operation):
         print "Please enter a valid operator."
         return False
 
-    #make sure the last 1 (or two) are operands
-    if not operation_as_list[1].isdigit():
-        print "Please enter valid operands."
-        return False
+     #make sure the last 1 (or two) are operands
+     #THIS DOES NOT WORK YET
+    for i in operation_as_list:
+        if not operation_as_list[i].isdigit():
+            print "Please enter valid operands."
+            return False
 
     if operation_as_list[0] in operators_twooperands:
-        if len(operation_as_list) != 3:
+        if len(operation_as_list) <= 2:
             print "Please enter two operands."
-            return False
-        if not operation_as_list[2].isdigit():
-            print "Please enter valid operands."
             return False
 
     #otherwise continue to split the operation with commas or spaces        
@@ -63,21 +56,6 @@ def split_operation(operation):
     elif "," in operation:
         operation_as_list = operation.split(",")
     return operation_as_list
-    
-
-
-
-#while True:
-#    oper = raw_inptut()
-#    if op == "q":
-#        break
-#    if not valid:
-#        print "duh"
-#        continue
-
-#    ... do stuff
-
-
 
 def main(): 
     while True:
@@ -88,9 +66,6 @@ def main():
         if operation == "q" or operation == "quit":
             break
 
-
-
-
         operation_as_list = is_input_valid(operation) #the list if true, otherwise false
         if operation_as_list == False:
             continue
@@ -98,28 +73,25 @@ def main():
         #if the input is valid, we know we can successfully split it
         #with either spaces or commas
         operator = operation_as_list[0]
-        operand1 = int(operation_as_list[1])
-
-        #if the function requires 2 operands, assign the second one
-        if len(operation_as_list) == 3:
-            operand2 = int(operation_as_list[2])
+        for i in operation_as_list:
+            i = int(i)
 
         if operator in ["+", "add", "plus"]:
-            print add(operand1,operand2)
+            print reduce(add, operation_as_list[1:])
         if operator in ["-", "subtract", "minus"]:
-            print subtract(operand1,operand2)
+            print reduce(subtract, operation_as_list[1:])
         if operator in ["*", "multiply", "times"]:
-            print multiply(operand1,operand2)
+            print reduce(multiply, operation_as_list[1:])
         if operator in ["/", "divide"]:
-            print divide(operand1,operand2)
+            print reduce(divide, operation_as_list[1:])
         if operator in ["%", "modulo", "mod"]:
-            print mod(operand1,operand2)
+            print reduce(mod, operation_as_list[1:])
         if operator == "square":
-            print square(operand1)
+            print square(operation_as_list[1])
         if operator == "cube":
-            print cube(operand1)
+            print cube(operation_as_list[1])
         if operator in ["power", "pow", "**"]:
-            print power(operand1,operand2)
+            print reduce(power, operation_as_list[1:])
     
 
 if __name__ == '__main__':
